@@ -1,0 +1,2 @@
+# macrc
+Basic MacOS configuration
