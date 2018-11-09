@@ -1,0 +1,90 @@
+set enc=utf-8
+set fenc=utf-8
+
+set nocompatible " disable vi compatibility
+set nobackup     " disable ~files
+
+syntax on
+set number
+set ruler
+set cursorline
+
+set backspace=2
+" indent with space size 2
+filetype plugin indent on
+set autoindent
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+"" color scheme
+"colorscheme monokai-soda
+"colorscheme jellybeans 
+colorscheme jellybeans 
+"colorscheme delek 
+
+set showmatch
+
+" mouse feature
+set mouse=a
+
+" fix arrow keys bug
+"imap OA <ESC>ki
+"imap OB <ESC>ji
+"imap OC <ESC>li
+"imap OD <ESC>hi
+"set t_ku=OA
+"set t_kd=OB
+"set t_kr=OC
+"set t_kl=OD
+imap <ESC>oA <ESC>ki
+imap <ESC>oB <ESC>ji
+imap <ESC>oC <ESC>li
+imap <ESC>oD <ESC>hi
+
+
+set hlsearch
+nnoremap <esc><esc> :silent! nohls<cr>
+hi Search term=reverse ctermbg=52 guibg=Cyan
+
+" hidden buffer for unsave buffer
+" set hidden
+
+" for Markdown highlight (bug with equation)
+function! MathAndLiquid()
+    "" Define certain regions
+    " Block math. Look for "$$[anything]$$"
+    syn region math start=/\$\$/ end=/\$\$/
+    " inline math. Look for "$[not $][anything]$"
+    syn match math_block '\$[^$].\{-}\$'
+
+    " Liquid single line. Look for "{%[anything]%}"
+    syn match liquid '{%.*%}'
+    " Liquid multiline. Look for "{%[anything]%}[anything]{%[anything]%}"
+    syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
+    " Fenced code blocks, used in GitHub Flavored Markdown (GFM)
+    syn region highlight_block start='```' end='```'
+
+    "" Actually highlight those regions.
+    hi link math Statement
+    hi link liquid Statement
+    hi link highlight_block Function
+    hi link math_block Function
+endfunction
+
+let g:markdown_minlines = 150
+" Call everytime we open a Markdown file
+autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
+"Highlight TODO, FIXME and other stuff
+if has("autocmd")
+  " Highlight TODO, FIXME, NOTE, etc.
+  if v:version > 701
+    autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\)')
+    "autocmd Syntax * call matchadd('Pr0n',  '\W\zs\XXX')
+    autocmd Syntax * call matchadd('Debug', '\W\zs\NOTE')
+    "autocmd Syntax * call matchadd('Idea', '\W\zs\(INFO\|IDEA\)')
+  endif
+endif
+
