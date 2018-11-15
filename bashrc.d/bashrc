@@ -1,0 +1,48 @@
+# === main bashrc config ===
+
+# load stuff ---------------
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  source $(brew --prefix)/etc/bash_completion
+fi
+if [ -f $(which pandoc) ]; then
+  eval "$(pandoc --bash-completion)"
+fi
+if [ -e "${HOME}/.iterm2_shell_integration.bash" ]; then
+  source "${HOME}/.iterm2_shell_integration.bash"
+fi
+
+# PATH ---------------------
+export PATH="/usr/local/sbin:$PATH"
+# add julia to the path
+if [[ -d "/Applications/Julia-1.0.app" ]]; then
+  export PATH=$PATH:"/Applications/Julia-1.0.app/Contents/Resources/julia/bin"
+fi
+
+# add some Applications
+if [[ -d "${HOME}/Applications/checker-279" ]]; then
+  # add homebrew clang
+  export PATH=$PATH:"${HOME}/Applications/checker-279/bin"
+fi
+
+# personal bin
+if [[ -d "${HOME}/.bin" ]]; then
+  export PATH=$PATH:"~/.bin"
+fi
+
+# global variables ---------
+# gls colors
+export LS_COLORS="no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;91:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=00;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35:*Makefile=00;36:*.o=00;90:*.mod=00;90:"
+
+# prompt
+export PS1=" \[\e[38;5;45m\]\h\[\e[0m\]:\[\e[95m\]\W\[\e[0m\] \[\e[92m\]\u\[\e[0m\]\[\e[37m\]\$\[\e[0m\] "
+
+#for ^-x-e to edit a long command line
+export EDITOR=vim
+
+# load other config --------
+# becarful of the lexicographic order
+for f in ${HOME}/.bashrc.d/*.bashrc; do
+  echo "${f}"
+  source "${f}"
+done
+
